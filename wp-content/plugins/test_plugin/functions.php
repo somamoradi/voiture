@@ -93,8 +93,6 @@ function create_voitures()
     register_taxonomy( 'marque', array( 'voitures' ), $args );
     } 
 
-}
-
 
 /**
  * Save the metabox data
