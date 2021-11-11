@@ -22,16 +22,14 @@ function create_voitures()
    $supports = array(
         'title',
         'editor',
-        'thumbnail',
-        'comments',
-        'revisions',
+        'thumbnail'
     );
 
        $args = array(
         'labels'             => $labels,
         'supports'             => $supports,
         'capability_type'      => 'post',
-        'description'        => __( 'Description.', 'Add New voitures' ),
+        'description'        => __( 'Liste de Voitures', 'Add New voitures' ),
         'public'             => true,
         'publicly_queryable' => true,
         'show_ui'            => true,
@@ -42,55 +40,44 @@ function create_voitures()
         'hierarchical'       => false,
         'menu_position'      => 3,
         'menu_icon'          =>'dashicons-car',
-        'taxonomies'         => array('marque'),
+        'taxonomies'         => array('marques'),
 
     );
-        register_post_type( 'voitures', $args );
-     }
-     add_action( 'init', 'create_voitures' );
+    register_post_type( 'voitures', $args );
+    }
+    add_action( 'init', 'create_voitures' );
 
-
-
-
-    function save_voitures_custom_fields(){
-         global $post;
-
-         if ( $post )
-         {
-           update_post_meta($post->ID, "short_description", @$_POST["short_description"]);
-           update_post_meta($post->ID, "price", @$_POST["price"]);
-           update_post_meta($post->ID, "length", @$_POST["length"]);
-           update_post_meta($post->ID,'voitures_ship_lead_days',@$_POST['ship_lead_days']);
-           update_post_meta($post->ID,'commision_broker',@$_POST['commision_broker']);
-          }
-        }
-    add_action( 'save_post', 'save_voitures_custom_fields' );
-
-    // add marque taxonomy
-    add_action( 'init', 'marque', 1 );
-    function marque() {
+    // add marques taxonomy
+    add_action( 'init', 'marques', 1 );
+    function marques() {
     $labels = array(
-        'name'              => _x( 'marque', 'taxonomy general name' ),
-        'singular_name'     => _x( 'marque', 'taxonomy singular name' ),
-        'search_items'      => __( 'Search marque' ),
-        'all_items'         => __( 'All marque' ),
-        'parent_item'       => __( 'Parent marque' ),
-        'parent_item_colon' => __( 'Parent marque:' ),
-        'edit_item'         => __( 'Edit marque' ),
-        'update_item'       => __( 'Update marque' ),
-        'add_new_item'      => __( 'Add New marque' ),
-        'new_item_name'     => __( 'New marque Name' ),
-        'menu_name'         => __( 'marque' ),
+        'name'              => _x( 'marques', 'taxonomy general name' ),
+        'singular_name'     => _x( 'marques', 'taxonomy singular name' ),
+        'search_items'      => __( 'Search marques' ),
+        'all_items'         => __( 'All marques' ),
+        'parent_item'       => __( 'Parent marques' ),
+        'parent_item_colon' => __( 'Parent marques:' ),
+        'edit_item'         => __( 'Edit marques' ),
+        'update_item'       => __( 'Update marques' ),
+        'add_new_item'      => __( 'Add New marques' ),
+        'new_item_name'     => __( 'New marques Name' ),
+        'menu_name'         => __( 'marques' ),
       );
 
        $args = array(
         'hierarchical'      => true,
         'labels'            => $labels,
         'show_ui'           => true,
+        'query_var'          => true,
+        'public'             => true,
+        'with_front'         => true,
+        'publicly_queryable' => true,
+        'ep_mask'            => true,
         'show_admin_column' => true,
-        'rewrite'           => array( 'slug' => 'marque' ),
+        'show_in_rest'      => true,
+        'rewrite'           => array( 'slug' => 'marques' ),
     );
-    register_taxonomy( 'marque', array( 'voitures' ), $args );
+    register_taxonomy( 'marques', array( 'voitures' ), $args );
     } 
 
 
@@ -105,7 +92,7 @@ function wpt_save_voitures_meta( $post_id, $post ) {
 
     // Verify this came from the our screen and with proper authorization,
     // because save_post can be triggered at other times.
-    if ( ! isset( $_POST['isbn'] ) || ! wp_verify_nonce( $_POST['book_fields'], basename(__FILE__) ) ) {
+    if ( ! isset( $_POST['isbn'] ) || ! wp_verify_nonce( $_POST['voitures_fields'], basename(__FILE__) ) ) {
         return $post_id;
     }
     // Now that we're authenticated, time to save the data.
